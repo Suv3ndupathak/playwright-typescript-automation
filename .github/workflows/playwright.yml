@@ -10,9 +10,13 @@ jobs:
   test:
     timeout-minutes: 30
     runs-on: ubuntu-latest
-    # Optional: Remove the 'container' block to see if raw ubuntu-latest is faster
+
     container:
       image: mcr.microsoft.com/playwright:v1.58.2-jammy
+
+    strategy:
+      matrix:
+        browser: [chromium]
 
     steps:
       - uses: actions/checkout@v4
@@ -20,14 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm' # Caches dependencies
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
 
-      # Only needed if you stop using the 'container' image
-      # - name: Install Playwright Browsers
-      #   run: npx playwright install --with-deps chromium
-
-      - name: Run Playwright tests
-        run: npx playwright test --project=${{ matrix.browser }} --shard=${{ strategy.job-index }}/${{ strategy.job-total }}
+      - run: npx playwright test --project=${{ matrix.browser }}
