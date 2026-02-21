@@ -1,8 +1,6 @@
 const js = require('@eslint/js');
 const tsParser = require('@typescript-eslint/parser');
 const tsPlugin = require('@typescript-eslint/eslint-plugin');
-const prettierPlugin = require('eslint-plugin-prettier');
-const prettierConfig = require('eslint-config-prettier');
 
 module.exports = [
   {
@@ -14,6 +12,7 @@ module.exports = [
       '/.playwright/',
       '/test-results/',
       '/playwright-report/',
+      'eslint.config.js',
     ],
   },
   {
@@ -31,13 +30,10 @@ module.exports = [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
-      prettier: prettierPlugin,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...tsPlugin.configs.recommended.rules,
-      ...prettierConfig.rules,
-      'prettier/prettier': 'error',
       '@typescript-eslint/no-unused-vars': [
         'warn',
         {
@@ -56,7 +52,6 @@ module.exports = [
     },
     rules: {
       ...js.configs.recommended.rules,
-      'prettier/prettier': 'error',
     },
   },
 ];
