@@ -1,4 +1,5 @@
 import { Page, expect } from '@playwright/test';
+import { clickElement, fillElement } from '../utils/helper';
 
 export class LoginPage {
   readonly page: Page;
@@ -12,15 +13,19 @@ export class LoginPage {
   }
 
   async enterUsername(username: string) {
-    await this.page.getByRole('textbox', { name: 'Username' }).fill(username);
+    const usernameField = this.page.getByRole('textbox', { name: 'Username' });
+    await fillElement(usernameField, username);
   }
 
   async enterPassword(password: string) {
-    await this.page.getByRole('textbox', { name: 'Password' }).fill(password);
+    const passwordField = this.page.getByRole('textbox', { name: 'Password' });
+    await fillElement(passwordField, password);
   }
 
   async clickLogin() {
-    await this.page.getByRole('button', { name: 'Login' }).click();
+    const loginButton = this.page.getByRole('button', { name: 'Login' });
+    await clickElement(loginButton);
+    await this.page.waitForLoadState('load', { timeout: 15000 });
   }
 
   async verifyDashboard() {
@@ -43,10 +48,10 @@ export class LoginPage {
   }
 
   async clickProfile() {
-    await this.page
+    const profileIcon = this.page
       .getByRole('banner')
-      .getByRole('img', { name: 'profile picture' })
-      .click();
+      .getByRole('img', { name: 'profile picture' });
+    await clickElement(profileIcon);
   }
 
   async clickLogout() {
@@ -54,13 +59,12 @@ export class LoginPage {
       this.page.getByRole('menuitem', { name: 'Logout' })
     ).toBeVisible({ timeout: 5000 });
 
-    await this.page.getByRole('menuitem', { name: 'Logout' }).click();
+    const logoutButton = this.page.getByRole('menuitem', { name: 'Logout' });
+    await clickElement(logoutButton);
+    await this.page.waitForLoadState('load', { timeout: 15000 });
     console.log('Logout button has been clicked');
   }
   async verifyLogout() {
-    // Wait for navigation to complete after logout
-    await this.page.waitForLoadState('networkidle');
-
     await expect(
       this.page.getByRole('img', { name: 'company-branding' })
     ).toBeVisible({ timeout: 30000 });
