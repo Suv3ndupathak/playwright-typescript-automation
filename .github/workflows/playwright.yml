@@ -28,3 +28,4 @@ jobs:
       - run: npm ci
 
       - run: npx playwright test --project=${{ matrix.browser }}
+      
